@@ -1,5 +1,6 @@
 package ua.edu.lntu.cw4
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,18 +34,33 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppMain() {
     IPZ_CR_4Theme {
         val navController = rememberNavController()
-        NavHost(navController, startDestination = "first") {
-            composable("first") { FirstScreen(navController) }
-            composable("second/{selectedItem}", arguments = listOf(navArgument("selectedItem") { type = NavType.IntType })) { backStackEntry ->
-                val selectedItem = backStackEntry.arguments?.getInt("selectedItem")
-                if (selectedItem != null) {
-                    SecondScreen(selectedItem, navController)
-                } else {
-                    // Handle error case
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Control Work") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        }
+                    }
+                )
+            }
+        ) {
+            NavHost(navController, startDestination = "first") {
+                composable("first") { FirstScreen(navController) }
+                composable("second/{selectedItem}", arguments = listOf(navArgument("selectedItem") { type = NavType.IntType })) { backStackEntry ->
+                    val selectedItem = backStackEntry.arguments?.getInt("selectedItem")
+                    if (selectedItem != null) {
+                        SecondScreen(selectedItem, navController)
+                    } else {
+                        // Handle error case
+                    }
                 }
             }
         }
@@ -54,7 +72,7 @@ fun FirstScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 34.dp),
+            .padding(top = 58.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -87,7 +105,7 @@ fun SecondScreen(selectedItem: Int, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 34.dp),
+            .padding(top = 58.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
